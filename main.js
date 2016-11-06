@@ -32,13 +32,13 @@ var coffeeShop = {
     for(var coffee in req) {
       var numBeans = req[coffee].beanRequirement;
       //check if coffee exist
-      // if(drinkType === coffee && (this.beans > numBeans)){
       if(drinkType === coffee){
-         isADrink = true;
-         console.log(drinkType + ' on the making' );
-
-        // break;
-        coffeeShop.reduceBeans(numBeans);
+        //coffee exist
+        isADrink = true;
+        if(coffeeShop.reduceBeans(numBeans)){
+          console.log(drinkType + ' on the making' );
+        }
+        break;
       }
     }
 
@@ -51,20 +51,31 @@ var coffeeShop = {
   },
   //reduce amount of beans per drink
   reduceBeans: function (numBeans) {
-    this.beans -= numBeans;
-
-    console.log('coffee beans left ' + this.beans);
-    if(this.beans < 5) {
+    var succeded = false;
+    //is there enough beans
+    if(this.beans < numBeans) {
+      //dont have enough beans
       // alert('Sorry, we\'re all out of beans!');
       console.log('Sorry, we\'re all out of beans!');
+      this.buySupplies();
+    }else{
+      //got enough beans
+      this.beans -= numBeans;
+      console.log('coffee beans left ' + this.beans);
+      succeded = true;
     }
+    return succeded;
   },
 
   buySupplies: function (coins) {
     var beansPrice = 3;
     var totalCost = coins * beansPrice;
+    if(this.money < 3){
+      console.log('out of money');
+    }else{
     //deduct the money with total cost
     this.money -= totalCost;
+    }
   },
 
   buyDrink: function (price) {
@@ -74,6 +85,7 @@ var coffeeShop = {
   }
 };
 
+//code
 coffeeShop.makeDrink("latte");
 coffeeShop.makeDrink("americano");
 coffeeShop.makeDrink("filtered");
@@ -81,6 +93,6 @@ coffeeShop.makeDrink("doubleShot");
 coffeeShop.makeDrink("frenchPress");
 
 
-//fix bug when coffee beans runs out
+//fix bug when coffee beans runs out - solved
 //check INDIVIDUAL EXERCISE (EXTENSION 2)
 //solve INDIVIDUAL EXERCISE (EXTENSION 3)
